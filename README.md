@@ -1,16 +1,137 @@
-# React + Vite
+# Autonomous Schema Drift Control Plane
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React/Vite control plane for the **Autonomous Schema Drift Detection & Semantic Mapping Healer** project.
 
-Currently, two official plugins are available:
+The dashboard provides a visual interface for detecting schema changes, understanding semantic field relationships, observing mapping repairs, validating proposed changes, applying release governance, and auditing the complete execution flow.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Project
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Enterprise integration mappings can become invalid when upstream schemas change.
 
-## Expanding the ESLint configuration
+A field may be:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Renamed
+- Removed
+- Added
+- Changed in datatype
+- Structurally modified
+
+Instead of manually identifying and repairing every affected mapping, this project explores an AI-assisted workflow:
+
+**DETECT → UNDERSTAND → HEAL → VALIDATE → DECIDE → AUDIT**
+
+---
+
+## Control Plane
+
+The dashboard provides visibility into the autonomous healing process.
+
+### DETECT
+
+Compares the baseline schema against the current schema and identifies drift.
+
+### UNDERSTAND
+
+Uses semantic analysis to determine whether a removed field corresponds to a candidate field in the new schema.
+
+### HEAL
+
+Repairs the affected source-side mapping while preserving the existing target mapping.
+
+### VALIDATE
+
+Checks whether the repaired mapping is compatible with the current source payload.
+
+### DECIDE
+
+Applies confidence and validation rules to determine:
+
+- `AUTO_RELEASE`
+- `NEEDS_APPROVAL`
+- `REJECT`
+
+### AUDIT
+
+Records runtime execution details including:
+
+- Timestamp
+- Source
+- Detected field
+- Semantic match
+- Confidence
+- Decision
+
+---
+
+## Features
+
+### Replay Demo
+
+Provides deterministic scenarios for demonstrating the pipeline.
+
+### Upload Your Own
+
+Accepts:
+
+1. Baseline XSD
+2. Current XSD
+3. Existing Mapping JSON
+4. Sample Source XML
+
+The uploaded artifacts are processed through the autonomous workflow.
+
+### Semantic Analysis
+
+Displays:
+
+- Candidate field
+- Match type
+- Confidence
+- AI reasoning
+
+### Mapping Visualization
+
+Shows the mapping before and after repair and distinguishes:
+
+- AI repaired mappings
+- Preserved mappings
+- Unresolved mappings
+
+### Release Governance
+
+The UI separates AI confidence from release authorization.
+
+A high-confidence AI result does not automatically bypass validation.
+
+---
+
+## Architecture
+
+```text
+                    React Control Plane
+                           │
+                           │ HTTP
+                           ▼
+                 Gemini / Backend Engine
+                           │
+              ┌────────────┼────────────┐
+              │            │            │
+              ▼            ▼            ▼
+         Schema Diff   Semantic AI   Mapping
+                         Matching     Healing
+              │            │            │
+              └────────────┼────────────┘
+                           ▼
+                       Validation
+                           │
+                           ▼
+                    Confidence Gate
+                           │
+             ┌─────────────┼─────────────┐
+             ▼             ▼             ▼
+        AUTO_RELEASE  NEEDS_APPROVAL   REJECT
+                           │
+                           ▼
+                       Audit Trail
