@@ -105,6 +105,14 @@ The UI separates AI confidence from release authorization.
 
 A high-confidence AI result does not automatically bypass validation.
 
+
+## Backend Engine
+
+The AI and schema-processing engine is maintained separately:
+
+**[schema-drift-backend](https://github.com/santoshbyte/schema-drift-backend)**
+
+The backend contains the schema-drift detection, Gemini semantic matching, mapping-healing, validation, confidence-gate and proxy components.
 ---
 
 ## Architecture
