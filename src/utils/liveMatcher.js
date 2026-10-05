@@ -1,4 +1,5 @@
-const PROXY_URL = 'http://localhost:3001';
+const PROXY_URL =
+  import.meta.env.VITE_PROXY_URL || 'http://localhost:3001';
 
 export async function classifyField({
   removedField,
