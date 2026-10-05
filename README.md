@@ -1,3 +1,10 @@
+## Live Demo
+
+**Live Application:** https://schema-drift-dashboard-dz808n48r-santoshbytes-projects.vercel.app/
+The production dashboard provides an interactive control plane for the autonomous schema-drift detection and mapping-healing workflow.
+
+> For the live semantic-analysis workflow, the frontend communicates with the deployed Gemini proxy backend.
+
 # Autonomous Schema Drift Control Plane
 
 React/Vite control plane for the **Autonomous Schema Drift Detection & Semantic Mapping Healer** project.
@@ -23,6 +30,26 @@ Instead of manually identifying and repairing every affected mapping, this proje
 **DETECT → UNDERSTAND → HEAL → VALIDATE → DECIDE → AUDIT**
 
 ---
+
+## Production Architecture
+
+```text
+                    USER
+                     │
+                     ▼
+          ┌─────────────────────┐
+          │       Vercel        │
+          │  React Control Plane│
+          └──────────┬──────────┘
+                     │ HTTPS
+                     ▼
+          ┌─────────────────────┐
+          │       Render        │
+          │  Node/Express Proxy │
+          └──────────┬──────────┘
+                     │
+                     ▼
+              Google Gemini
 
 ## Control Plane
 
